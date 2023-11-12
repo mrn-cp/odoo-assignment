@@ -25,7 +25,7 @@ class TestWarehouse(TestStockCommon):
             'product_ids': [(4, self.product_1.id)],
         })
         inventory.action_start()
-        # As done in common.py, there is already an inventory line existing
+        # As done in base_test.py, there is already an inventory line existing
         self.assertEqual(len(inventory.line_ids), 1)
         self.assertEqual(inventory.line_ids.theoretical_qty, 50.0)
         self.assertEqual(inventory.line_ids.product_id, self.product_1)

@@ -28,7 +28,7 @@ class TestRunnerLoggingCommon(TransactionCase):
     """
     The purpose of this class is to do some "metatesting": it actually checks
     that on error, the runner logged the error with the right file reference.
-    This is mainly to avoid having errors in test/common.py or test/runner.py`.
+    This is mainly to avoid having errors in test/base_test.py or test/runner.py`.
     This kind of metatesting is tricky; in this case the logs are made outside
     of the test method, after the teardown actually.
     """
@@ -176,10 +176,10 @@ Exception: {message}
 '''ERROR: Subtest TestRunnerLogging.test_with_decorators (login='__system__')
 Traceback (most recent call last):
   File "<decorator-gen-xxx>", line $line, in test_with_decorators
-  File "/root_path/odoo/odoo/tests/common.py", line $line, in _users
+  File "/root_path/odoo/odoo/tests/base_test.py", line $line, in _users
     func(*args, **kwargs)
   File "<decorator-gen-xxx>", line $line, in test_with_decorators
-  File "/root_path/odoo/odoo/tests/common.py", line $line, in warmup
+  File "/root_path/odoo/odoo/tests/base_test.py", line $line, in warmup
     func(*args, **kwargs)
   File "/root_path/odoo/odoo/addons/base/tests/test_test_suite.py", line $line, in test_with_decorators
     raise Exception('This is an error')
@@ -308,7 +308,7 @@ Traceback (most recent call last):
     with self.assertQueryCount(system=0):
   File "/usr/lib/python/contextlib.py", line $line, in __exit__
     next(self.gen)
-  File "/root_path/odoo/odoo/tests/common.py", line $line, in assertQueryCount
+  File "/root_path/odoo/odoo/tests/base_test.py", line $line, in assertQueryCount
     self.fail(msg % (login, count, expected, funcname, filename, linenum))
 AssertionError: Query count more than expected for user __system__: 1 > 0 in test_assertQueryCount at base/tests/test_test_suite.py:$line
 ''')
