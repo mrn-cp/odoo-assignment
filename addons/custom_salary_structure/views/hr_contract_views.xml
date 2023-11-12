@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="hr_contract_view_form_inherit" model="ir.ui.view">
+        <field name="name">hr.contract.view.form.custom.salary.inherit</field>
+        <field name="model">hr.contract</field>
+        <field name="inherit_id" ref="hr_contract.hr_contract_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header//field[@name='state']" position="before">
+                <button name="send_email" string="Send Email" type="object" class="oe_highlight"/>
+            </xpath>
+            <xpath expr="//page[@name='information']" position="after">
+                <page string="Other Info" name="other_info">
+                    <group>
+                        <group name="other_info" string="Other Info">
+                            <field name="salary_structure_ids"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+
+    <record id="hr_salary_rule_view_form_inherit" model="ir.ui.view">
+        <field name="name">hr.salary.rule.form.custom.salary.inherit</field>
+        <field name="model">hr.salary.rule</field>
+        <field name="inherit_id" ref="payroll.hr_salary_rule_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='appears_on_payslip']" position="after">
+                <field name="rule_type"/>
+                <field name="is_basic"/>
+                <field name="is_editable"/>
+                <field name="appear_on_contract_structure"/>
+            </xpath>
+        </field>
+    </record>
+
+
+    <record id="view_custom_salary_structure_form" model="ir.ui.view">
+        <field name="name">contract.salary.structure.form</field>
+        <field name="model">contract.salary.structure</field>
+        <field name="arch" type="xml">
+            <form string="Custom Salary Structure" modify="1">
+                <header>
+
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+
+                    <group>
+                        <group>
+                            <field name="salary_contract_id" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="ctc"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Salary Rules">
+
+
+                            <group>
+                                <group>
+                                    <div class="oe_inline">
+                                        <field name="salary_rule_ids" widget="one2many">
+                                            <tree create="false" edit="false" delete="false" editable="bottom">
+                                                <field name="name" readonly="1"/>
+                                                <field name="amount"/>
+                                                <field name="employee_amount" readonly="1"/>
+                                                <field name="is_editable" invisible="0" readonly="1"/>
+                                            </tree>
+                                        </field>
+                                    </div>
+                                </group>
+                            </group>
+
+
+                        </page>
+
+                    </notebook>
+                </sheet>
+                <!--	                <div class="oe_chatter">-->
+                <!--	                    <field name="message_follower_ids" widget="mail_followers"/>-->
+                <!--	                    <field name="activity_ids" widget="mail_activity"/>-->
+                <!--	                    <field name="message_ids" widget="mail_thread"/>-->
+                <!--	                </div>-->
+            </form>
+        </field>
+    </record>
+
+    <record id="contract_salary_structure_tree" model="ir.ui.view">
+        <field name="name">contract.salary.structure.tree</field>
+        <field name="model">contract.salary.structure</field>
+        <field name="arch" type="xml">
+            <tree string="Custom Salary Structure">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_custom_salary_structure" model="ir.actions.act_window">
+        <field name="name">Contract Salary Structure</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">contract.salary.structure</field>
+        <field name="binding_view_types">form</field>
+        <field name="domain">[]</field>
+        <field name="binding_view_types">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Click to Create a New Operations.
+            </p>
+        </field>
+    </record>
+
+    <record id="action_custom_salary_structure_tree_view" model="ir.actions.act_window.view">
+        <field eval="1" name="sequence"/>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="contract_salary_structure_tree"/>
+        <field name="act_window_id" ref="action_custom_salary_structure"/>
+    </record>
+    <record id="action_custom_salary_structure_form_view" model="ir.actions.act_window.view">
+        <field eval="2" name="sequence"/>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_custom_salary_structure_form"/>
+        <field name="act_window_id" ref="action_custom_salary_structure"/>
+    </record>
+
+</odoo>

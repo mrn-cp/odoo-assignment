@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_contract_salary_structure,access_contract_salary_structure,model_contract_salary_structure,base.group_user,1,1,1,1
+access_contract_salary_rule,access_contract_salary_rule,model_contract_salary_rule,base.group_user,1,1,1,1

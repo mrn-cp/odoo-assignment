@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <template id="custom_salary_template" name="Custom Salary">
+        <t t-call="website.layout">
+            <div class="oe_structure">
+                <div class="container mt-5">
+<!--                    <link href="/custom_salary_structure/static/src/css/custom_style.css" rel="stylesheet" />-->
+
+                    <!-- Header Section -->
+                    <form action="" enctype="application/json" method="POST">
+<!--                    <form>-->
+<!--                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>-->
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h1 class="text-primary">Customise Your Salary</h1>
+                                <p>Welcome Mr./Mrs. <t t-esc="employee.get('name')"/> .
+                                    You can customise your salary in the Section2.</p>
+                            </div>
+                        </div>
+
+                        <!-- Main Content Section -->
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h4 class="text-primary">Section 1</h4>
+                                <h6 class="text-info">Structure Details</h6>
+                                <div t-field="salary_structure.name"/>
+                                <ul class="list-group">
+                                    <t t-set="rules"
+                                       t-value="salary_structure.salary_rule_ids.filtered(lambda x: not x.is_editable)"/>
+                                    <t t-foreach="rules" t-as="rule">
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            <t t-esc="rule.name"/>
+                                            <span class="badge badge-primary badge-pill">
+                                                <t t-esc="rule.amount"/>
+                                            </span>
+                                        </li>
+                                    </t>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h4 class="text-primary">Section 2</h4>
+                                <h6 class="text-info">Customise Your Structure.</h6>
+                                <ul class="list-group">
+                                    <div class="d-none">
+                                        <li class="list-group-item d-flex justify-content-between align-items-center d-none">
+                                        Gross Total Amount
+                                        <span>
+                                            <div id="result">
+                                                <input type="number"
+                                                       t-att-value="gross_total.get('amount')"
+                                                       class="input-field1 form-control"
+                                                       readonly="true"
+                                                />
+                                            </div>
+                                        </span>
+                                    </li>
+                                    </div>
+
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        New Base Amount
+                                        <span>
+                                            <div id="result">
+                                                <input type="number"
+                                                       t-att-value="base_record_val.get('amount')"
+                                                       t-attf-data-param-id="{{ base_record_val.get('id') }}"
+                                                       class="input-field form-control"
+                                                       readonly="true"
+                                                />
+                                            </div>
+                                        </span>
+                                    </li>
+                                    <t t-set="rules" t-value="editable_rules_dict"/>
+                                    <t t-foreach="rules" t-as="rule">
+                                        <t t-set="id" t-value="rule.get('name')"/>
+                                        <t t-set="type" t-value="rule.get('rule_type')"/>
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            <t t-esc="rule.get('name')"/>
+                                            <span>
+                                                <input
+                                                        type="number"
+                                                        name="amount"
+                                                        t-att-value="rule.get('amount')"
+                                                        class="input-field form-control"
+                                                        onchange="handleChange(event)"
+                                                        t-attf-data-param-id="{{ rule.get('id') }}"
+                                                        t-attf-data-param-type="{{ rule.get('rule_type') }}"
+
+                                                />
+                                            </span>
+                                        </li>
+                                    </t>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Footer Section -->
+                        <div class="row mt-5">
+                            <div class="col-md-12">
+                                <hr/>
+                                <p>Please clik the Submit button to save changes.</p>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary" onclick="triggerJsFunction()">Submit</button>
+                        <hr/>
+<!--                        <div class="container mt-5">-->
+<!--                            <div class="alert alert-success" role="alert">-->
+
+<!--                            </div>-->
+<!--                        </div>-->
+
+                        <!-- Bootstrap JS and Popper.js -->
+                        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+                        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+                        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+                    </form>
+                </div>
+            </div>
+
+        </t>
+        <script type="text/javascript" src="/custom_salary_structure/static/src/js/custom_script.js"></script>
+
+        <script type="text/javascript">
+            // JavaScript function to trigger
+            function triggerJsFunction() {
+                // Prevent default form submission
+                $("form").submit(function(event) {
+                    event.preventDefault();
+
+                    // Call the JavaScript function
+                    var resultFromJS = myJavaScriptFunction();
+
+                    // Serialize form data to JSON
+                    var formData = {};
+                    $("form").serializeArray().forEach(function(item) {
+                        formData[item.name] = item.value;
+                    });
+
+                    // Add the resultFromJS to formData
+                    formData.result_from_js = resultFromJS;
+
+                    // Send the result to the server using Ajax
+                    $.ajax({
+                        type: 'POST',
+                        // url: '/custom_salary_structure/save_changes',
+                        url: window.location.origin + '/custom_salary_structure/save_changes',
+                        contentType: 'application/json',
+                        data: JSON.stringify(formData),
+                        success: function(response) {
+                            // Display the response from the server
+                            if (response.success) {
+                                // Show success message
+                                //$("#resultFromJs").html(response.message);
+                                // window.location.href = '/custom_salary_structure/redirect_and_show_wizard';
+                                var htmlCode = '&lt;div class="alert alert-success" role="alert"&gt;Your changes were successful!&lt;/div&gt;';
+                                // document.querySelector('.alert').innerHTML = htmlCode;
+                                document.querySelector('.alert').innerHTML = "Your changes were successful!";
+                                window.alert("success!");
+                            } else {
+                                // Show error message
+                                console.error("Update failed:", response.message);
+                            }
+                        },
+                        error: function(error) {
+                            console.error("Ajax error:", error);
+                        }
+                    });
+                });
+            }
+        </script>
+    </template>
+
+</odoo>

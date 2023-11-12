@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="success_wizard_template" name="Custom Salary">
+            <t t-call="website.layout">
+            <div class="oe_structure">
+                <div class="container mt-5">
+                    <form>
+                        <div class="alert alert-success" role="alert">
+                            Your changes were successful!
+                        </div>
+                    </form>
+                </div>
+            </div>
+            </t>
+
+        </template>
+    </data>
+</odoo>
